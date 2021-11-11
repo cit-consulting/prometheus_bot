@@ -11,6 +11,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"os"
 	"path"
 	"sort"
 	"strconv"
@@ -22,7 +23,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/microcosm-cc/bluemonday"
-	"gopkg.in/telegram-bot-api.v4"
+	tgbotapi "gopkg.in/telegram-bot-api.v4"
 
 	"gopkg.in/yaml.v2"
 )
@@ -408,6 +409,11 @@ func main() {
 
 	if cfg.SplitMessageBytes == 0 {
 		cfg.SplitMessageBytes = 4000
+	}
+
+	var token_env, exists = os.LookupEnv("TELEGRAM_BOT_TOKEN")
+	if exists {
+		cfg.TelegramToken = token_env
 	}
 
 	bot_tmp, err := tgbotapi.NewBotAPI(cfg.TelegramToken)
